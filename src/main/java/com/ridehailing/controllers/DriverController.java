@@ -18,14 +18,14 @@ public class DriverController {
         this.driverRepository = driverRepository;
     }
 
-    // ✅ 1. Get all drivers
+    //  Get all drivers
     @GetMapping
     public ResponseEntity<List<Driver>> getAllDrivers() {
         List<Driver> drivers = driverRepository.findAll();
         return ResponseEntity.ok(drivers);
     }
 
-    // ✅ 2. Get a single driver by ID
+    // Get a single driver by ID
     @GetMapping("/{id}")
     public ResponseEntity<Driver> getDriverById(@PathVariable String id) {
         Optional<Driver> driver = driverRepository.findById(id);
@@ -33,7 +33,7 @@ public class DriverController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // ✅ 3. Add a new driver
+    //  Add a new driver
     @PostMapping("/add")
     public ResponseEntity<String> addDriver(@RequestParam String id,
                                             @RequestParam int x,
@@ -43,7 +43,7 @@ public class DriverController {
         return ResponseEntity.ok("Driver " + id + " added successfully.");
     }
 
-    // ✅ 4. Update driver availability
+    // 4. Update driver availability
     @PutMapping("/{id}/availability")
     public ResponseEntity<String> updateAvailability(@PathVariable String id, @RequestParam boolean available) {
         Optional<Driver> driverOpt = driverRepository.findById(id);
@@ -56,7 +56,7 @@ public class DriverController {
         return ResponseEntity.notFound().build();
     }
 
-    // ✅ 5. Delete a driver
+    //  Delete a driver
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteDriver(@PathVariable String id) {
         driverRepository.deleteById(id);
