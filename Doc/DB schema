@@ -1,0 +1,28 @@
+CREATE TABLE drivers (
+    id VARCHAR(50) PRIMARY KEY,
+    x_coordinate INT NOT NULL,
+    y_coordinate INT NOT NULL,
+    available BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+CREATE TABLE riders (
+    id VARCHAR(50) PRIMARY KEY,
+    x_coordinate INT NOT NULL,
+    y_coordinate INT NOT NULL
+);
+
+CREATE TABLE rides (
+    ride_id VARCHAR(50) PRIMARY KEY,
+    rider_id VARCHAR(50),
+    driver_id VARCHAR(50),
+    start_x INT NOT NULL,
+    start_y INT NOT NULL,
+    end_x INT,
+    end_y INT,
+    time_taken INT,
+    active BOOLEAN NOT NULL DEFAULT TRUE,
+    FOREIGN KEY (rider_id) REFERENCES riders(id) ON DELETE CASCADE,
+    FOREIGN KEY (driver_id) REFERENCES drivers(id) ON DELETE SET NULL
+);
+
+
