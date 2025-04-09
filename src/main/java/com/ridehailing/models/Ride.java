@@ -1,27 +1,36 @@
 package com.ridehailing.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class Ride {
     @Id
-    private String rideId;
+    private String rideId;  // Maps to ride_id in DB
+
+    @Column(name = "startx")  // ✅ Fix column name
+    private int startX;
+
+    @Column(name = "starty")  // ✅ Fix column name
+    private int startY;
+
+    @Column(name = "endx")
+    private Integer endX;
+
+    @Column(name = "endy")
+    private Integer endY;
+
+    @Column(name = "time_taken")
+    private Integer timeTaken;
+
+    private Boolean active;
 
     @ManyToOne
-    private Rider rider;
-
-    @ManyToOne
+    @JoinColumn(name = "driver_id")
     private Driver driver;
 
-    private int startX;
-    private int startY;
-    private int endX;
-    private int endY;
-    private int timeTaken; // in minutes
-    private boolean active = true;
-
+    @ManyToOne
+    @JoinColumn(name = "rider_id")
+    private Rider rider;
     public Ride() {}
 
     public Ride(String rideId, Rider rider, Driver driver) {
@@ -66,7 +75,7 @@ public class Ride {
     public void setTimeTaken(int timeTaken)
     { this.timeTaken = timeTaken;
     }
-    public boolean isActive()
+    public Boolean isActive()
     { return active; }
     public void setActive(boolean active)
     { this.active = active; }

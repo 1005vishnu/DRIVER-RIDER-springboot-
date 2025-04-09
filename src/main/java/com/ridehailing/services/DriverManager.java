@@ -20,7 +20,8 @@ public class DriverManager
 
     public void addDriver(String id, int x, int y)
     {
-        if (id == null || id.trim().isEmpty()) {
+        if (id == null || id.trim().isEmpty())
+        {
             logger.warn("Attempted to add a driver with an invalid ID.");
             throw new IllegalArgumentException("Invalid Driver ID");
         }
