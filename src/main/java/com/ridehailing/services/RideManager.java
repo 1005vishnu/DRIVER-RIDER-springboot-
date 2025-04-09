@@ -15,15 +15,18 @@ public class RideManager
     private static final Logger logger = LoggerFactory.getLogger(RideManager.class);
     private final RideRepository rideRepository;
 
-    public RideManager(RideRepository rideRepository) {
+    public RideManager(RideRepository rideRepository)
+    {
         this.rideRepository = rideRepository;
     }
 
     public String startRide(String rideId, Rider rider, Driver driver)
+
     {
         logger.info("Attempting to start ride: {}", rideId);
 
-        if (rider == null) {
+        if (rider == null)
+        {
             logger.warn("Ride {} failed: Invalid Rider", rideId);
             throw new IllegalArgumentException("Invalid Rider");
         }
@@ -52,7 +55,8 @@ public class RideManager
                     return new IllegalArgumentException("INVALID_RIDE");
                 });
 
-        if (!ride.isActive()) {
+        if (!ride.isActive())
+        {
             logger.warn("Ride {} is already stopped.", rideId);
             throw new IllegalArgumentException("Ride already stopped");
         }
@@ -63,7 +67,8 @@ public class RideManager
         return "RIDE_STOPPED " + rideId;
     }
 
-    public double getBill(String rideId) {
+    public double getBill(String rideId)
+    {
         logger.info("Calculating bill for ride {}", rideId);
 
         Ride ride = rideRepository.findById(rideId)

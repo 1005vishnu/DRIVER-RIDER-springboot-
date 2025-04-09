@@ -36,15 +36,13 @@ public class DriverController {
 
     //  Add a new driver
     @PostMapping("/add")
-    public ResponseEntity<String> addDriver(@RequestParam String id,
-                                            @RequestParam int x,
-                                            @RequestParam int y) {
-        Driver driver = new Driver(id, x, y);
+    public ResponseEntity<String> addDriver(@RequestBody Driver driver) {
         driverRepository.save(driver);
-        return ResponseEntity.ok("Driver " + id + " added successfully.");
+        return ResponseEntity.ok("Driver " + driver.getId() + " added successfully.");
     }
 
-    // 4. Update driver availability
+
+    // Update driver availability
     @PutMapping("/{id}/availability")
     public ResponseEntity<String> updateAvailability(@PathVariable String id, @RequestParam boolean available) {
         Optional<Driver> driverOpt = driverRepository.findById(id);
