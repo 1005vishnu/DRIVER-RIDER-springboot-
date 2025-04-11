@@ -30,11 +30,13 @@ public class RideManager
             logger.warn("Ride {} failed: Invalid Rider", rideId);
             throw new IllegalArgumentException("Invalid Rider");
         }
-        if (rideRepository.existsById(rideId)) {
+        if (rideRepository.existsById(rideId))
+        {
             logger.warn("Ride {} already exists", rideId);
             throw new IllegalArgumentException("Ride already exists");
         }
-        if (driver == null || !driver.isAvailable()) {
+        if (driver == null || !driver.isAvailable())
+        {
             logger.warn("Ride {} failed: Driver {} is unavailable or invalid", rideId, driver.getId());
             throw new IllegalArgumentException("Invalid Driver");
         }
@@ -46,7 +48,8 @@ public class RideManager
         return "RIDE_STARTED " + rideId;
     }
 
-    public String stopRide(String rideId, int endX, int endY, int timeTaken) {
+    public String stopRide(String rideId, int endX, int endY, int timeTaken)
+    {
         logger.info("Stopping ride {}", rideId);
 
         Ride ride = rideRepository.findById(rideId)

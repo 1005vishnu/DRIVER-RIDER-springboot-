@@ -15,6 +15,11 @@ public class Driver {
 
     @Column(name = "y_coordinate", nullable = false)
     private int y;
+    @Column
+    private double rating = 5.0;
+
+    @Column(name = "total_ratings")
+    private int totalRatings = 0;
 
     @Column(name = "available", nullable = false)
     private boolean available = true;
@@ -37,16 +42,40 @@ public class Driver {
     { this.id = id;
     }
     public int getX()
-    { return x; }
+    { return x;
+    }
     public void setX(int x)
-    { this.x = x; }
+
+    {
+            this.x = x;
+    }
     public int getY()
     { return y; }
     public void setY(int y)
     { this.y = y; }
     public boolean isAvailable()
-    { return available; }
+
+    {
+        return available;
+    }
     public void setAvailable(boolean available)
-    { this.available = available; }
+    { this.available = available;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public int getTotalRatings() {
+        return totalRatings;
+    }
+
+    public void setTotalRatings(int totalRatings) {
+        this.totalRatings = totalRatings;
+    }
 }
 

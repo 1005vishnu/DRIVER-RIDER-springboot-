@@ -23,26 +23,40 @@ public class RideController {
     }
 
     @PostMapping("/start")
-    public ResponseEntity<String> startRide(@RequestParam String rideId,
-                                            @RequestParam String riderId)
-    {
+    public ResponseEntity<String> startRide(@RequestParam String riderId,
+                                            @RequestParam(required = false) String driverId) {
         Optional<Rider> riderOpt = rideService.getRiderById(riderId);
-        if (riderOpt.isEmpty())
-        {
+        if (riderOpt.isEmpty()) {
             return ResponseEntity.badRequest().body("Invalid rider ID");
         }
 
         Rider rider = riderOpt.get();
-        Optional<Driver> driverOpt = rideService.matchDriver(rider);
+        Optional<Driver> selectedDriver = Optional.empty();
 
-        if (driverOpt.isEmpty())
-        {
-            return ResponseEntity.badRequest().body("No available drivers");
+        if (driverId != null && !driverId.isBlank()) {
+            selectedDriver = rideService.getDriverById(driverId);
+            if (selectedDriver.isEmpty() || !selectedDriver.get().isAvailable()) {
+                return ResponseEntity.badRequest().body("Provided driver is not available.");
+            }
+        } else if (rider.getPreferredDriverId() != null) {
+            selectedDriver = rideService.getDriverById(rider.getPreferredDriverId());
+            if (selectedDriver.isEmpty() || !selectedDriver.get().isAvailable()) {
+                selectedDriver = rideService.matchDriver(rider); // fallback to match
+            }
+        } else {
+            selectedDriver = rideService.matchDriver(rider);
         }
 
-        String result = rideService.startRide(rideId, rider, driverOpt.get());
+        if (selectedDriver.isEmpty()) {
+            return ResponseEntity.badRequest().body("No available drivers found.");
+        }
+
+
+        String result = rideService.startRide(rider, selectedDriver.get());
         return ResponseEntity.ok(result);
     }
+
+
 
     @PostMapping("/{rideId}/stop")
     public ResponseEntity<String> stopRide(@PathVariable String rideId, @RequestParam int endX, @RequestParam int endY, @RequestParam int timeTaken)
@@ -61,4 +75,20 @@ public class RideController {
 
         return ResponseEntity.ok("Total Bill: $" + bill + " (Discount Applied: " + discount + "%)");
     }
+
+
+    @PostMapping("/rate")
+    public ResponseEntity<String> rateDriver(@RequestParam String rideId,
+                                             @RequestParam int rating,
+                                             @RequestParam(required = false, defaultValue = "false") boolean preferred) {
+        try {
+            rideService.rateDriver(rideId, rating, preferred);
+            return ResponseEntity.ok("Rating submitted successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error submitting rating.");
+        }
+    }
+
 }

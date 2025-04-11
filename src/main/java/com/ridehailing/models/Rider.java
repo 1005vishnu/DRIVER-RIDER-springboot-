@@ -12,7 +12,7 @@ public class Rider {
     private String id;
     private int x;
     private int y;
-    private String preferredDriver;
+    private String preferredDriverId;
     private int numRides;
 
     public Rider() {}
@@ -22,7 +22,7 @@ public class Rider {
         this.id = id;
         this.x = x;
         this.y = y;
-        this.preferredDriver = preferredDriver;
+        this.preferredDriverId = preferredDriverId;
         this.numRides = numRides;
 
 
@@ -62,6 +62,14 @@ public class Rider {
     {
         this.numRides = numRides;
     }
+    public String getPreferredDriverId() {
+        return preferredDriverId;
+    }
+
+    public void setPreferredDriverId(String preferredDriverId) {
+        this.preferredDriverId = preferredDriverId;
+    }
+
 
     public double getDiscountPercentage()
     {

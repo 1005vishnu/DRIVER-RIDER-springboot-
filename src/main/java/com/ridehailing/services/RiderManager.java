@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Service
 public class RiderManager {
     private static final Logger logger = LoggerFactory.getLogger(RiderManager.class);
-    private static final double MAX_DISTANCE = 5.0; // Maximum radius in km
+    private static final double MAX_DISTANCE = 20.0; // Maximum radius in km
     private final DriverRepository driverRepository;
     private final RiderRepository riderRepository;
 

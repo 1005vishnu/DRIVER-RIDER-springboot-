@@ -7,10 +7,10 @@ public class Ride {
     @Id
     private String rideId;  // Maps to ride_id in DB
 
-    @Column(name = "startx")  // ✅ Fix column name
+    @Column(name = "startx")  //  column name
     private int startX;
 
-    @Column(name = "starty")  // ✅ Fix column name
+    @Column(name = "starty")  //  column name
     private int startY;
 
     @Column(name = "endx")
@@ -23,6 +23,8 @@ public class Ride {
     private Integer timeTaken;
 
     private Boolean active;
+
+     private String preferredDriverId;
 
     @ManyToOne
     @JoinColumn(name = "driver_id")
@@ -44,12 +46,26 @@ public class Ride {
 
     // Getters and Setters
     public String getRideId()
+
     { return rideId;
+
     }
     public void setRideId(String rideId)
     { this.rideId = rideId;
     }
-    public Rider getRider() { return rider; }
+
+    public String getPreferredDriverId() {
+        return preferredDriverId;
+    }
+
+    public void setPreferredDriverId(String preferredDriverId)
+    {
+        this.preferredDriverId = preferredDriverId;
+    }
+
+    public Rider getRider()
+    { return rider;
+    }
     public void setRider(Rider rider) { this.rider = rider; }
     public Driver getDriver()
     { return driver;
@@ -60,9 +76,15 @@ public class Ride {
     public int getStartX()
     { return startX;
     }
-    public void setStartX(int startX) { this.startX = startX; }
-    public int getStartY() { return startY; }
-    public void setStartY(int startY) { this.startY = startY; }
+    public void setStartX(int startX)
+    { this.startX = startX;
+    }
+    public int getStartY()
+    { return startY;
+    }
+    public void setStartY(int startY)
+    { this.startY = startY;
+      }
     public int getEndX() { return endX; }
     public void setEndX(int endX) { this.endX = endX; }
     public int getEndY()
