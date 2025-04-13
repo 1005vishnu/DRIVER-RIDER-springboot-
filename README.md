@@ -26,6 +26,10 @@ The system should also handle various edge cases like drivers not being availabl
 - REST API endpoints for managing rides and drivers
 - Database integration with MySQL using Spring Data JPA
 - Automated table creation using Hibernate
+- Discount for frequent riders
+- Allow riders to rate drivers after completing a ride
+- Let riders mark a driver as “preferred” for future rides
+- Automatically prioritize preferred drivers during ride assignment if available
 
 ## Prerequisites
 
@@ -47,11 +51,64 @@ src/
 │   ├── controllers/   # Handles ride-related commands
 │   ├── models/        # Entity classes (Driver, Rider, Ride)
 │   ├── repository/    # Data storage (Spring Data JPA Repositories)
-│   ├── services/      # Business logic (RideManager, DriverManager, BillingCalculator, DistanceCalculator)
+│   ├── services/      # Business logic (RideManager, DriverManager, BillingCalculator, DistanceCalculator,Ride service)
 │── test/             # JUnit test cases
 ```
 
+**Sample cURL API Calls**
+
+**Add a driver**
+curl -X POST "http://localhost:8080/drivers/add?id=D1&x=1&y=1"
+**Add a rider**
+curl -X POST "http://localhost:8080/riders/add?id=R1&x=0&y=0"
+**Match drivers for a rider**
+curl -X GET "http://localhost:8080/rides/match?riderId=R1"
+**start a ride (auto-select driver or use preferred driver)**
+curl -X POST "http://localhost:8080/rides/start?riderId=R1"
+**Start a ride with specific driver**
+curl -X POST "http://localhost:8080/rides/start?riderId=R1&driverId=D1"
+**Stop a ride**
+curl -X POST "http://localhost:8080/rides/stop?rideId=RIDE-001&destX=4&destY=5&Timetaken=32"
+**Get bill for a ride**
+curl -X GET "http://localhost:8080/rides/bill?rideId=RIDE-001"
 ## Sample Input & Output
+
+**Database Schema Overview**
+
+Rider Table
+| Field               | Type         | Null | Key | Default | Extra |
+|--------------------|--------------|------|-----|---------|-------|
+| id                 | varchar(255) | NO   | PRI | NULL    |       |
+| x                  | int          | NO   |     | NULL    |       |
+| y                  | int          | NO   |     | NULL    |       |
+| preferred_driver   | varchar(255) | YES  |     | NULL    |       |
+| discount_percentage| int          | YES  |     | 0       |       |
+| num_rides          | int          | YES  |     | 0       |       |
+| preferred_driver_id| varchar(255) | YES  |     | NULL    |       |
+
+Driver Table
+| Field         | Type         | Null | Key | Default | Extra |
+|--------------|--------------|------|-----|---------|-------|
+| id           | varchar(255) | NO   | PRI | NULL    |       |
+| available    | bit(1)       | NO   |     | NULL    |       |
+| x_coordinate | int          | NO   |     | NULL    |       |
+| y_coordinate | int          | NO   |     | NULL    |       |
+| rating       | float        | YES  |     | NULL    |       |
+| total_ratings| int          | YES  |     | 0       |       |
+
+Ride Table
+| Field               | Type         | Null | Key | Default | Extra |
+|--------------------|--------------|------|-----|---------|-------|
+| ride_id            | varchar(255) | NO   | PRI | NULL    |       |
+| active             | bit(1)       | NO   |     | NULL    |       |
+| startx             | int          | NO   |     | NULL    |       |
+| starty             | int          | NO   |     | NULL    |       |
+| endx               | int          | NO   |     | NULL    |       |
+| endy               | int          | NO   |     | NULL    |       |
+| time_taken         | int          | NO   |     | NULL    |       |
+| driver_id          | varchar(255) | YES  | MUL | NULL    |       |
+| rider_id           | varchar(255) | YES  | MUL | NULL    |       |
+| preferred_driver_id| varchar(255) | YES  |     | NULL    |       |
 
 ### Sample Input:
 ```
