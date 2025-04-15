@@ -10,7 +10,8 @@ import org.springframework.stereotype.Service;
 import jakarta.annotation.PostConstruct;
 
 @Service
-public class DataInitializer {
+public class DataInitializer
+{
     private static final Logger logger = LoggerFactory.getLogger(DataInitializer.class);
     private final DriverRepository driverRepository;
     private final RiderRepository riderRepository;
@@ -21,7 +22,8 @@ public class DataInitializer {
     }
 
     @PostConstruct
-    public void initData() {
+    public void initData()
+    {
         logger.info("Initializing data...");
         if (driverRepository.count() == 0)
         {

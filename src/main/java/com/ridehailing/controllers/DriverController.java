@@ -25,11 +25,8 @@ public class DriverController {
         return ResponseEntity.ok(drivers);
     }
 
-<<<<<<< HEAD
     // Get a single driver by ID
-=======
-    //  Get a single driver by ID
->>>>>>> e53125a (changes commit)
+
     @GetMapping("/{id}")
     public ResponseEntity<Driver> getDriverById(@PathVariable String id) {
         Optional<Driver> driver = driverRepository.findById(id);
@@ -39,19 +36,13 @@ public class DriverController {
 
     //  Add a new driver
     @PostMapping("/add")
-    public ResponseEntity<String> addDriver(@RequestParam String id,
-                                            @RequestParam int x,
-                                            @RequestParam int y) {
-        Driver driver = new Driver(id, x, y);
+    public ResponseEntity<String> addDriver(@RequestBody Driver driver) {
         driverRepository.save(driver);
-        return ResponseEntity.ok("Driver " + id + " added successfully.");
+        return ResponseEntity.ok("Driver " + driver.getId() + " added successfully.");
     }
 
-<<<<<<< HEAD
-    // 4. Update driver availability
-=======
-    //  Update driver availability
->>>>>>> e53125a (changes commit)
+
+    // Update driver availability
     @PutMapping("/{id}/availability")
     public ResponseEntity<String> updateAvailability(@PathVariable String id, @RequestParam boolean available) {
         Optional<Driver> driverOpt = driverRepository.findById(id);
@@ -64,11 +55,7 @@ public class DriverController {
         return ResponseEntity.notFound().build();
     }
 
-<<<<<<< HEAD
     //  Delete a driver
-=======
-    // Delete a driver
->>>>>>> e53125a (changes commit)
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteDriver(@PathVariable String id) {
         driverRepository.deleteById(id);
