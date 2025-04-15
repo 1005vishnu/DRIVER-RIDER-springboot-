@@ -58,9 +58,15 @@ src/
 **Sample cURL API Calls**
 
 **Add a driver**
-curl -X POST "http://localhost:8080/drivers/add?id=D1&x=1&y=1"
+curl -X POST "http://localhost:8080/drivers/add" \
+     -H "Content-Type: application/json" \
+     -d '{"id":"D1","x":1,"y":1}'
+
 **Add a rider**
-curl -X POST "http://localhost:8080/riders/add?id=R1&x=0&y=0"
+curl -X POST "http://localhost:8080/riders/add" \
+     -H "Content-Type: application/json" \
+     -d '{"id":"R1","name":"John Doe","pickupLocation":"37.7749,-122.4194"}'
+
 **Match drivers for a rider**
 curl -X GET "http://localhost:8080/rides/match?riderId=R1"
 **start a ride (auto-select driver or use preferred driver)**
