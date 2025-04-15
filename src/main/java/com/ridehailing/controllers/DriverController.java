@@ -2,6 +2,7 @@ package com.ridehailing.controllers;
 
 import com.ridehailing.models.Driver;
 import com.ridehailing.repository.DriverRepository;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +37,7 @@ public class DriverController {
 
     //  Add a new driver
     @PostMapping("/add")
-    public ResponseEntity<String> addDriver(@RequestBody Driver driver) {
+    public ResponseEntity<String> addDriver(@Valid  @RequestBody Driver driver) {
         driverRepository.save(driver);
         return ResponseEntity.ok("Driver " + driver.getId() + " added successfully.");
     }

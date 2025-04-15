@@ -15,7 +15,6 @@ import java.util.Optional;
 @RequestMapping("/rides")
 public class RideController {
 
-    @Autowired
     private final RideService rideService;
 
     public RideController(RideService rideService) {
