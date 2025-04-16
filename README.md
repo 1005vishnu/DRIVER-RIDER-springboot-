@@ -71,7 +71,7 @@ curl -X POST "http://localhost:8080/riders/add" \
 ```
 **Match drivers for a rider**
 ```bash
-curl -X GET "http://localhost:8080/rides/match?riderId=R1"
+curl -X GET "http://localhost:8080/riders/match?riderId=R1"
 ```
 **start a ride (auto-select driver or use preferred driver)**
 ```bash
