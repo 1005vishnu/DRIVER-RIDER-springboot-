@@ -130,6 +130,12 @@ Ride Table
 | rider_id           | varchar(255) | YES  | MUL | NULL    |       |
 | preferred_driver_id| varchar(255) | YES  |     | NULL    |       |
 
+
+**SEQUENCE DIAGRAM **
+
+![image](https://github.com/user-attachments/assets/7cb1bd2c-b8de-4457-a63d-99e146fcc515)
+
+
 ### Sample Input:
 ```
 ADD_DRIVER D1 1 1
