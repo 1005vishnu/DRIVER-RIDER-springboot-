@@ -83,11 +83,13 @@ curl -X POST "http://localhost:8080/rides/start?riderId=R1&driverId=D1"
 ```
 **Stop a ride**
 ```bash
-curl -X POST "http://localhost:8080/rides/stop?rideId=RIDE-001&destX=4&destY=5&Timetaken=32"
+curl -X POST "http://localhost:8080/rides/254b1659-cb8e-4312-8563-3d1cabab1c82/stop?endX=4&endY=5&timeTaken=32"
+
 ```
 **Get bill for a ride**
 ```bash
-curl -X GET "http://localhost:8080/rides/bill?rideId=RIDE-001"
+curl -X GET "http://localhost:8080/rides/254b1659-cb8e-4312-8563-3d1cabab1c82/bill"
+
 ```
 ## Sample Input & Output
 
