@@ -28,7 +28,9 @@ public class DriverController {
         return ResponseEntity.ok(drivers);
     }
 
+
     // Get a single driver by ID
+
     @GetMapping("/{id}")
     public ResponseEntity<Driver> getDriverById(@PathVariable String id) {
         try {
@@ -56,6 +58,7 @@ public class DriverController {
     }
 
     // Update driver availability
+
     @PutMapping("/{id}/availability")
     public ResponseEntity<String> updateAvailability(@PathVariable String id, @RequestParam boolean available) {
         try {
@@ -73,6 +76,7 @@ public class DriverController {
     }
 
     //  Delete a driver
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteDriver(@PathVariable String id) {
         try {
