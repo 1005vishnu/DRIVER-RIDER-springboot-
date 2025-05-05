@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @RestController
@@ -73,9 +74,9 @@ public class RideController {
     {
         try {
             Ride ride = rideService.getRideById(rideId);
-            double bill = BillingCalculator.calculateBill(ride);
+            BigDecimal bill = BillingCalculator.calculateBill(ride);
             double discount = ride.getRider().getDiscountPercentage();
-            return ResponseEntity.ok("Total Bill: $" + bill + " (Discount Applied: " + discount + "%)");
+            return ResponseEntity.ok("Total Bill: $" + bill.toPlainString() + " (Discount Applied: " + discount + "%)");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

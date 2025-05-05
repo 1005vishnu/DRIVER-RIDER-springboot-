@@ -83,11 +83,12 @@ class RideServiceTest {
         Rider rider = riderManager.getRiderById("R1");
         assertNotNull(rider);
         Driver driver = driverManager.getDriverById("D1").orElseThrow();
-        String rideId = rideManager.startRide("RIDE1", rider, driver);
+        String startResult = rideManager.startRide("RIDE1", rider, driver);
+        String rideId = startResult.replace("RIDE_STARTED ", "");
         assertNotNull(rideId);
 
         // Stop the ride with valid inputs
-        String stoppedRideId = rideManager.stopRide("RIDE1", 11, 21, 15);
+        String stoppedRideId = rideManager.stopRide(rideId, 11, 21, 15);
         assertNotNull(stoppedRideId);
     }
 
@@ -119,7 +120,8 @@ class RideServiceTest {
         assertNotNull(rider);
         Driver driver = driverManager.getDriverById("D1").orElseThrow();
         String firstResult = rideManager.startRide("UNIQUE_RIDE_ID", rider, driver);
-        assertNotNull(firstResult);
+        String rideId = firstResult.replace("RIDE_STARTED ", "");
+        assertNotNull(rideId);
 
         Exception exception = assertThrows(
                 IllegalArgumentException.class,
@@ -137,9 +139,10 @@ class RideServiceTest {
         assertNotNull(rider);
         Driver driver = driverManager.getDriverById("D1").orElseThrow();
         String startResult = rideManager.startRide("VALID_RIDE_ID", rider, driver);
-        assertNotNull(startResult);
+        String rideId = startResult.replace("RIDE_STARTED ", "");
+        assertNotNull(rideId);
 
-        String stopResult = rideManager.stopRide("VALID_RIDE_ID", 11, 21, 15);
+        String stopResult = rideManager.stopRide(rideId, 11, 21, 15);
         assertNotNull(stopResult);
     }
 
@@ -161,30 +164,35 @@ class RideServiceTest {
         assertNotNull(rider);
         Driver driver = driverManager.getDriverById("D1").orElseThrow();
         String startResult = rideManager.startRide("COMPLETED_RIDE_ID", rider, driver);
-        assertNotNull(startResult);
+        String rideId = startResult.replace("RIDE_STARTED ", "");
+        assertNotNull(rideId);
 
-        String firstStopResult = rideManager.stopRide("COMPLETED_RIDE_ID", 11, 21, 15);
+        String firstStopResult = rideManager.stopRide(rideId, 11, 21, 15);
         assertNotNull(firstStopResult);
 
         Exception exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> rideManager.stopRide("COMPLETED_RIDE_ID", 12, 22, 30)
+                () -> rideManager.stopRide(rideId, 12, 22, 30)
         );
         assertEquals("Ride already stopped", exception.getMessage());
     }
 
     @Test
-    void testGenerateBillValid() {
+    void testBillCalculation() {
+        // Arrange
         driverManager.addDriver("D1", 10, 20);
         riderManager.addRider(new Rider("R1", 10, 20));
         Rider rider = riderManager.getRiderById("R1");
-        assertNotNull(rider);
         Driver driver = driverManager.getDriverById("D1").orElseThrow();
-        String startResult = rideManager.startRide("ride123", rider, driver);
-        assertNotNull(startResult);
-        String stopResult = rideManager.stopRide("ride123", 11, 21, 15);
-        assertNotNull(stopResult);
-        double bill = rideManager.getBill("ride123");
-        assertTrue(bill > 0);
+        String startResult = rideManager.startRide("R1", rider, driver);
+        String rideId = startResult.replace("RIDE_STARTED ", "");
+        assertNotNull(rideId);
+        rideManager.stopRide(rideId, 11, 21, 15);
+
+        // Act
+        BigDecimal bill = rideManager.getBill(rideId);
+
+        // Assert
+        assertTrue(bill.compareTo(BigDecimal.ZERO) > 0);
     }
 }

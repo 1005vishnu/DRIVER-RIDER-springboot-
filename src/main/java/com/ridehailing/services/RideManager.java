@@ -5,6 +5,7 @@ import com.ridehailing.models.Rider;
 import com.ridehailing.models.Ride;
 import com.ridehailing.repository.RideRepository;
 import com.ridehailing.services.BillingCalculator;
+import java.math.BigDecimal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -70,7 +71,7 @@ public class RideManager
         return "RIDE_STOPPED " + rideId;
     }
 
-    public double getBill(String rideId)
+    public BigDecimal getBill(String rideId)
     {
         logger.info("Calculating bill for ride {}", rideId);
 
@@ -80,9 +81,8 @@ public class RideManager
                     return new IllegalArgumentException("Ride not found");
                 });
 
-        double bill = BillingCalculator.calculateBill(ride);
+        BigDecimal bill = BillingCalculator.calculateBill(ride);
         logger.info("Total bill for ride {}: ${}", rideId, bill);
         return bill;
     }
 }
-

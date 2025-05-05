@@ -2,23 +2,24 @@ package com.ridehailing.services;
 
 import com.ridehailing.models.Ride;
 import com.ridehailing.models.Rider;
+import java.math.BigDecimal;
 
 public class BillingCalculator {
 
-    public static double calculateBill(Ride ride)
+    public static BigDecimal calculateBill(Ride ride)
     {
-        double baseFare = 50; // Base fare
-        double distanceFare = 6.5 * ride.calculateDistance();
-        double timeFare = 2 * ride.getTimeTaken();
-        double subtotal = baseFare + distanceFare + timeFare;
-        double totalBill = subtotal * 1.2; // Add 20% service tax
+        BigDecimal baseFare = BigDecimal.valueOf(50); // Base fare
+        BigDecimal distanceFare = BigDecimal.valueOf(6.5).multiply(BigDecimal.valueOf(ride.calculateDistance()));
+        BigDecimal timeFare = BigDecimal.valueOf(2).multiply(BigDecimal.valueOf(ride.getTimeTaken()));
+        BigDecimal subtotal = baseFare.add(distanceFare).add(timeFare);
+        BigDecimal totalBill = subtotal.multiply(BigDecimal.valueOf(1.2)); // Add 20% service tax
 
         Rider rider = ride.getRider();
         if (rider.getNumRides() >= 5)
         {
-            totalBill *= 0.8; // Apply 20% discount
+            totalBill = totalBill.multiply(BigDecimal.valueOf(0.8)); // Apply 20% discount
         }
 
-        return totalBill;
+        return totalBill.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 }

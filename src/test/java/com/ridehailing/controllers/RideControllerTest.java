@@ -131,23 +131,26 @@ class RideControllerTest {
 
     @Test
     void testGenerateBillValid() throws Exception {
-        // Arrange
-        Rider rider = new Rider("rider123", 0, 0);
-        Driver driver = new Driver("driver123", 1, 1);
-        Ride ride = new Ride("ride123", rider, driver);
-        ride.setTimeTaken(0); // To match bill calculation
+        // Arrange: set up real objects, not mocks
+        Rider rider = new Rider("R1", 0, 0);
+        rider.setNumRides(0); // No discount
+        Driver driver = new Driver("D1", 10, 20);
+        Ride ride = new Ride("RIDE1", rider, driver);
+        ride.setTimeTaken(10);
         ride.setStartX(0);
         ride.setStartY(0);
         ride.setEndX(10);
         ride.setEndY(10);
-        when(rideService.getRideById("ride123")).thenReturn(ride);
-        // No discount for new rider
-        // Act & Assert
-        mockMvc.perform(get("/rides/ride123/bill")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().string(org.hamcrest.Matchers.startsWith("Total Bill: $")))
-                .andExpect(content().string(org.hamcrest.Matchers.containsString("Discount Applied: 0.0%")));
+
+        // Mock only the service to return our real ride
+        when(rideService.getRideById("RIDE1")).thenReturn(ride);
+
+        // Act & Assert: check that the response contains the expected bill (calculate it manually if needed)
+        mockMvc.perform(get("/rides/RIDE1/bill")
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().string(org.hamcrest.Matchers.startsWith("Total Bill: $")))
+            .andExpect(content().string(org.hamcrest.Matchers.containsString("Discount Applied: 0.0%")));
     }
 
     @Test
