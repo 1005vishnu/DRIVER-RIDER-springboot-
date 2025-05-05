@@ -30,6 +30,10 @@ public class RiderManager {
         riderRepository.save(rider);
     }
 
+    public Rider getRiderById(String id) {
+        return riderRepository.findById(id).orElse(null);
+    }
+
     public List<Driver> matchDrivers(Rider rider)
     {
         logger.info("Finding available drivers near Rider {} at ({}, {})", rider.getId(), rider.getX(), rider.getY());

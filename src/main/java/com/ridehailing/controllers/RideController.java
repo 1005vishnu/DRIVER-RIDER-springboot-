@@ -59,20 +59,26 @@ public class RideController {
 
     @PostMapping("/{rideId}/stop")
     public ResponseEntity<String> stopRide(@PathVariable String rideId, @RequestParam int endX, @RequestParam int endY, @RequestParam int timeTaken)
-
     {
-        rideService.stopRide(rideId, endX, endY, timeTaken);
-        return ResponseEntity.ok("Ride stopped successfully.");
+        try {
+            rideService.stopRide(rideId, endX, endY, timeTaken);
+            return ResponseEntity.ok("Ride stopped successfully.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/{rideId}/bill")
     public ResponseEntity<String> getBill(@PathVariable String rideId)
     {
-        Ride ride = rideService.getRideById(rideId);
-        double bill = BillingCalculator.calculateBill(ride);
-        double discount = ride.getRider().getDiscountPercentage();
-
-        return ResponseEntity.ok("Total Bill: $" + bill + " (Discount Applied: " + discount + "%)");
+        try {
+            Ride ride = rideService.getRideById(rideId);
+            double bill = BillingCalculator.calculateBill(ride);
+            double discount = ride.getRider().getDiscountPercentage();
+            return ResponseEntity.ok("Total Bill: $" + bill + " (Discount Applied: " + discount + "%)");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 
