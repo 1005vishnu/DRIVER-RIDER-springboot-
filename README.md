@@ -55,22 +55,85 @@ src/
 │── test/             # JUnit test cases
 ```
 
+## Running the Application
+
+### Run Locally (with your own MySQL)
+
+1. **Copy and configure environment variables:**
+   ```sh
+   cp .env.example .env
+   # Edit .env and set your local MySQL credentials (see .env.example for guidance)
+   ```
+2. **Start your local MySQL server** (make sure the database and user exist as in your .env).
+3. **Load environment variables and start the Spring Boot app:**
+   ```sh
+   export $(grep -v '^#' .env | xargs)
+   ./mvnw spring-boot:run
+   ```
+4. The API will be available at [http://localhost:8080](http://localhost:8080)
+
+### Run with Docker Compose (App + MySQL in containers)
+
+1. **Ensure Docker and Docker Compose are installed.**
+2. **From the project root, build and start all services:**
+   ```sh
+   docker-compose up --build
+   ```
+3. This will start both the Spring Boot app and a MySQL database as containers. The app will automatically connect to the MySQL container using the credentials defined in `docker-compose.yml`.
+4. The API will be available at [http://localhost:8080](http://localhost:8080)
+5. **To stop the containers:**
+   ```sh
+   docker-compose down
+   ```
+
+- When running in Docker Compose, you do NOT need to run your own MySQL or export .env variables manually.
+- When running locally, you must ensure your own MySQL is running and accessible.
+
+## Local Development Setup
+
+1. Copy `.env.example` to `.env` and fill in your local database credentials.
+2. Load the environment variables and start the app:
+   ```sh
+   export $(grep -v '^#' .env | xargs)
+   ./mvnw spring-boot:run
+   ```
+
+- Docker Compose will use its own environment variables automatically.
+
 **Sample cURL API Calls**
 
 **Add a driver**
-curl -X POST "http://localhost:8080/drivers/add?id=D1&x=1&y=1"
+```bash
+curl -X POST "http://localhost:8080/drivers/add" \
+     -H "Content-Type: application/json" \
+     -d '{"id":"D1","x":1,"y":1}'
+```
 **Add a rider**
-curl -X POST "http://localhost:8080/riders/add?id=R1&x=0&y=0"
+```bash
+curl -X POST "http://localhost:8080/riders/add" \
+     -H "Content-Type: application/json" \
+     -d '{"id":"R1","name":"John Doe","pickupLocation":"37.7749,-122.4194"}'
+```
 **Match drivers for a rider**
+```bash
 curl -X GET "http://localhost:8080/rides/match?riderId=R1"
+```
 **start a ride (auto-select driver or use preferred driver)**
+```bash
 curl -X POST "http://localhost:8080/rides/start?riderId=R1"
+```
 **Start a ride with specific driver**
+```bash
 curl -X POST "http://localhost:8080/rides/start?riderId=R1&driverId=D1"
+```
 **Stop a ride**
+```bash
 curl -X POST "http://localhost:8080/rides/stop?rideId=RIDE-001&destX=4&destY=5&Timetaken=32"
+```
 **Get bill for a ride**
+```bash
 curl -X GET "http://localhost:8080/rides/bill?rideId=RIDE-001"
+```
 ## Sample Input & Output
 
 **Database Schema Overview**
@@ -128,4 +191,3 @@ RIDE_STARTED RIDE-001
 RIDE_STOPPED RIDE-001
 BILL RIDE-001 D2 186.72
 ```
-
