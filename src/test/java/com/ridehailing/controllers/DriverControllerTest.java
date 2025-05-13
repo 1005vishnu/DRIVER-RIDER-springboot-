@@ -56,6 +56,7 @@ class DriverControllerTest {
         verify(driverManager, times(1)).addDriver("driver1", 10, 20);
     }
 
+
     @Test
     public void testGetDriverById() throws Exception {
         Driver driver = new Driver("driver1", 10, 20);

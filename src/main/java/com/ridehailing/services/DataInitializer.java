@@ -42,3 +42,4 @@ public class DataInitializer
         logger.info("Data initialization completed.");
     }
 }
+

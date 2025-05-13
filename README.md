@@ -55,6 +55,51 @@ src/
 │── test/             # JUnit test cases
 ```
 
+## Running the Application
+
+### Run Locally (with your own MySQL)
+
+1. **Copy and configure environment variables:**
+   ```sh
+   cp .env.example .env
+   # Edit .env and set your local MySQL credentials (see .env.example for guidance)
+   ```
+2. **Start your local MySQL server** (make sure the database and user exist as in your .env).
+3. **Load environment variables and start the Spring Boot app:**
+   ```sh
+   export $(grep -v '^#' .env | xargs)
+   ./mvnw spring-boot:run
+   ```
+4. The API will be available at [http://localhost:8080](http://localhost:8080)
+
+### Run with Docker Compose (App + MySQL in containers)
+
+1. **Ensure Docker and Docker Compose are installed.**
+2. **From the project root, build and start all services:**
+   ```sh
+   docker-compose up --build
+   ```
+3. This will start both the Spring Boot app and a MySQL database as containers. The app will automatically connect to the MySQL container using the credentials defined in `docker-compose.yml`.
+4. The API will be available at [http://localhost:8080](http://localhost:8080)
+5. **To stop the containers:**
+   ```sh
+   docker-compose down
+   ```
+
+- When running in Docker Compose, you do NOT need to run your own MySQL or export .env variables manually.
+- When running locally, you must ensure your own MySQL is running and accessible.
+
+## Local Development Setup
+
+1. Copy `.env.example` to `.env` and fill in your local database credentials.
+2. Load the environment variables and start the app:
+   ```sh
+   export $(grep -v '^#' .env | xargs)
+   ./mvnw spring-boot:run
+   ```
+
+- Docker Compose will use its own environment variables automatically.
+
 **Sample cURL API Calls**
 
 **Add a driver**
@@ -146,4 +191,3 @@ RIDE_STARTED RIDE-001
 RIDE_STOPPED RIDE-001
 BILL RIDE-001 D2 186.72
 ```
-

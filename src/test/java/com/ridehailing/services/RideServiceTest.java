@@ -196,3 +196,4 @@ class RideServiceTest {
         assertTrue(bill.compareTo(BigDecimal.ZERO) > 0);
     }
 }
+
