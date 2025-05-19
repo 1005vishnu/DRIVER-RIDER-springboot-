@@ -32,22 +32,21 @@ jobs:
       - name: Build with Maven Wrapper
         run: ./mvnw -B clean package
 
+      - name: Debug target directory
+        run: ls -lR target || echo "No target directory"
+
+      - name: Upload build artifact
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-artifact
+          path: target/
+
       - name: Run unit tests
         run: ./mvnw test -Dsurefire.reportFormat=plain
 
       - name: Run integration tests
         run: ./mvnw verify -Dsurefire.reportFormat=plain
-
-      - name: Check for Target Directory
-        id: check_target
-        run: if [ -d target ]; then echo "Target exists"; else exit 1; fi
-
-      - name: Upload build artifact
-        if: always() && steps.check_target.outcome == 'success'
-        uses: actions/upload-artifact@v2
-        with:
-          name: build-artifact
-          path: target/
 
   deploy:
     needs: build
