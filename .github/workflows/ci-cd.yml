@@ -38,11 +38,12 @@ jobs:
       - name: Run integration tests
         run: ./mvnw verify
 
-      - name: List target directory
-        run: ls -R target
+      - name: Check for Test Reports
+        id: check_reports
+        run: if [ -d target/surefire-reports ]; then echo "Reports found"; else exit 1; fi
 
       - name: Archive test reports
-        if: always()
+        if: always() && steps.check_reports.outcome == 'success'
         uses: actions/upload-artifact@v3
         with:
           name: test-reports
