@@ -30,13 +30,16 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Build with Maven Wrapper
-        run: ./mvnw -B clean package
+        id: build
+        run: |
+          ./mvnw -B clean package
+          if [ -d "target" ]; then echo "target_exists=true" >> $GITHUB_OUTPUT; else echo "target_exists=false" >> $GITHUB_OUTPUT; fi
 
       - name: Debug target directory
         run: ls -lR target || echo "No target directory"
 
       - name: Upload build artifact
-        if: always()
+        if: steps.build.outputs.target_exists == 'true'
         uses: actions/upload-artifact@v3
         with:
           name: build-artifact
