@@ -33,10 +33,10 @@ jobs:
         run: ./mvnw -B clean package
 
       - name: Run unit tests
-        run: ./mvnw test
+        run: ./mvnw test -Dsurefire.reportFormat=plain
 
       - name: Run integration tests
-        run: ./mvnw verify
+        run: ./mvnw verify -Dsurefire.reportFormat=plain
 
       - name: Check for Test Reports
         id: check_reports
