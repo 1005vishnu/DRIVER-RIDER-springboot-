@@ -53,8 +53,6 @@ class RideControllerTest {
 
 
 
-
-
     @Test
     void testStartRideValid() throws Exception {
         // Arrange

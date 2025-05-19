@@ -80,3 +80,4 @@ class RiderControllerTest {
         assert riderManager.matchDrivers(rider).isEmpty() : "No drivers should be matched";
     }
 }
+
