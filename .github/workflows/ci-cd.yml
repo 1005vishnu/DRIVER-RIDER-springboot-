@@ -38,16 +38,16 @@ jobs:
       - name: Run integration tests
         run: ./mvnw verify -Dsurefire.reportFormat=plain
 
-      - name: Check for Test Reports
-        id: check_reports
-        run: if [ -d target/surefire-reports ]; then echo "Reports found"; else exit 1; fi
+      - name: Check for Target Directory
+        id: check_target
+        run: if [ -d target ]; then echo "Target exists"; else exit 1; fi
 
-      - name: Archive test reports
-        if: always() && steps.check_reports.outcome == 'success'
+      - name: Upload build artifact
+        if: always() && steps.check_target.outcome == 'success'
         uses: actions/upload-artifact@v3
         with:
-          name: test-reports
-          path: target/surefire-reports/
+          name: build-artifact
+          path: target/
 
   deploy:
     needs: build
