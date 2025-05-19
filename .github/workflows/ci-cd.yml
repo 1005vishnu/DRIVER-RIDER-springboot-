@@ -2,9 +2,9 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, master, addons ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main, master, addons ]
 
 jobs:
   build:
@@ -37,6 +37,9 @@ jobs:
 
       - name: Run integration tests
         run: ./mvnw verify
+
+      - name: List target directory
+        run: ls -R target
 
       - name: Archive test reports
         if: always()
