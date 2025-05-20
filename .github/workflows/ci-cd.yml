@@ -24,6 +24,7 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -58,11 +59,31 @@ jobs:
           name: build-artifact
           path: target/
 
+      - name: Wait for MySQL to be ready
+        run: |
+          for i in {1..30}; do
+            if mysqladmin ping -h127.0.0.1 -uroot -proot --silent; then
+              echo "MySQL is up!";
+              break;
+            else
+              echo "Waiting for MySQL to be ready... ($i)";
+              sleep 2;
+            fi
+          done
+
       - name: Run unit tests
         run: ./mvnw test -Dsurefire.reportFormat=plain
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/ridehailing
+          SPRING_DATASOURCE_USERNAME: root
+          SPRING_DATASOURCE_PASSWORD: root
 
       - name: Run integration tests
         run: ./mvnw verify -Dsurefire.reportFormat=plain
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/ridehailing
+          SPRING_DATASOURCE_USERNAME: root
+          SPRING_DATASOURCE_PASSWORD: root
 
   deploy:
     needs: build
@@ -94,4 +115,3 @@ jobs:
 
       - name: Logout from Docker Hub
         run: docker logout
-
