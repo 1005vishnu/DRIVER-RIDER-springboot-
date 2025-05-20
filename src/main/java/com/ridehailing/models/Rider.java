@@ -33,6 +33,7 @@ public class Rider {
     @Column(name = "preferred_driver_id")
     private String preferredDriverId;
 
+    // Removed duplicate public Rider() constructor, Lombok's @NoArgsConstructor is sufficient
     public Rider(String id, int x, int y) {
         this.id = id;
         this.x = x;
