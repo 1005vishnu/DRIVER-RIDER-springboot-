@@ -55,6 +55,73 @@ src/
 │── test/             # JUnit test cases
 ```
 
+## Getting Started
+
+### Clone the Repository
+
+```sh
+git clone https://github.com/1005vishnu/DRIVER-RIDER-springboot-.git
+cd DRIVER-RIDER-springboot-
+```
+
+### Configure Environment Variables
+
+1. Copy the example environment file:
+   ```sh
+   cp .env.example .env
+   # Edit .env and set your local MySQL credentials (see .env.example for guidance)
+   ```
+2. **Important:** If you clone this repo or move it to a new environment, always update your `.env` file to match your local database and environment settings.
+
+### Build the Project
+
+```sh
+mvn clean install
+```
+
+### Run Tests
+
+```sh
+mvn test
+```
+
+### Run the Application
+
+#### Run Locally (with your own MySQL)
+
+1. Start your local MySQL server (ensure the database and user match your `.env`).
+2. Load environment variables and start the Spring Boot app:
+   ```sh
+   export $(grep -v '^#' .env | xargs)
+   ./mvnw spring-boot:run
+   ```
+3. The API will be available at [http://localhost:8080](http://localhost:8080)
+
+#### Run with Docker Compose (App + MySQL in containers)
+
+1. Ensure Docker and Docker Compose are installed.
+2. From the project root, build and start all services:
+   ```sh
+   docker-compose up --build
+   ```
+
+## Essential Git Commands
+
+- Clone the repository:
+  ```sh
+  git clone <repo-url>
+  ```
+- Check status:
+  ```sh
+  git status
+  ```
+- Commit changes:
+  ```sh
+  git add .
+  git commit -m "Your message"
+  git push
+  ```
+
 ## Running the Application
 
 ### Run Locally (with your own MySQL)
@@ -191,3 +258,8 @@ RIDE_STARTED RIDE-001
 RIDE_STOPPED RIDE-001
 BILL RIDE-001 D2 186.72
 ```
+
+## Related Projects
+
+You may also want to explore a similar ride-hailing project for reference:
+- [Riding](https://github.com/VAMSIKRISHNA2210/Riding.git)
