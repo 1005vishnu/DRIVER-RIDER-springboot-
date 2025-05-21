@@ -105,22 +105,6 @@ mvn test
    docker-compose up --build
    ```
 
-## Essential Git Commands
-
-- Clone the repository:
-  ```sh
-  git clone <repo-url>
-  ```
-- Check status:
-  ```sh
-  git status
-  ```
-- Commit changes:
-  ```sh
-  git add .
-  git commit -m "Your message"
-  git push
-  ```
 
 ## Running the Application
 
