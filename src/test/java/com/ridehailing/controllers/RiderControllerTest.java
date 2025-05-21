@@ -9,12 +9,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.mockito.Mockito;
 import java.util.List;
 import java.util.Optional;
 
 @WebMvcTest(RiderController.class)
+@ActiveProfiles("test")
 class RiderControllerTest {
 
     @Autowired
@@ -80,4 +82,3 @@ class RiderControllerTest {
         assert riderManager.matchDrivers(rider).isEmpty() : "No drivers should be matched";
     }
 }
-

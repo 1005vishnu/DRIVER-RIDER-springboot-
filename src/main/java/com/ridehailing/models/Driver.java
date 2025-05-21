@@ -28,7 +28,7 @@ public class Driver {
     @Column(name = "total_ratings")
     private int totalRatings = 0;
 
-    @Column(name = "available", nullable = false)
+    @Column(name = "available", nullable = false, columnDefinition = "BOOLEAN")
     private boolean available = true;
 
     public Driver(String id, int x, int y) {

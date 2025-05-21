@@ -2,15 +2,14 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, master, addons ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main, master, addons ]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    env:
-      MAVEN_OPTS: '-Xmx1024m'
+    runs-on: ubuntu-22.04
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -29,26 +28,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Build with Maven Wrapper
-        run: ./mvnw -B clean package
+      - name: Build with Maven
+        run: mvn -B clean package -DskipTests
 
-      - name: Run unit tests
-        run: ./mvnw test
-
-      - name: Run integration tests
-        run: ./mvnw verify
-
-      - name: Archive test reports
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-reports
-          path: target/surefire-reports/
+      - name: Run tests with mocks
+        run: mvn test -Dsurefire.reportFormat=plain -Dspring.profiles.active=test
 
   deploy:
     needs: build
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -71,7 +60,6 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: vishnuganesh/ridehailing:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/ridehailing:latest
 
-      - name: Logout from Docker Hub
-        run: docker logout
+

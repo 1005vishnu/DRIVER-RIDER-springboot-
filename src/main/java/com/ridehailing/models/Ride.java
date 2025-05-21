@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
+@Table(name = "ride")
 @NoArgsConstructor
 @Getter
 @Setter
@@ -39,6 +40,8 @@ public class Ride {
     @ManyToOne
     @JoinColumn(name = "rider_id")
     private Rider rider;
+
+    // Removed duplicate public Ride() constructor, Lombok's @NoArgsConstructor is sufficient
 
     public Ride(String rideId, Rider rider, Driver driver) {
         this.rideId = rideId;
