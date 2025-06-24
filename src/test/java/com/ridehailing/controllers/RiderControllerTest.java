@@ -36,24 +36,18 @@ class RiderControllerTest {
 
     @Test
     public void testAddRider() {
-        Rider rider = new Rider("rider1", 0, 0);
-
-        // Add rider
-        Mockito.doNothing().when(riderManager).addRider(rider);
-
-        // Check if rider is added
-        Mockito.when(rideService.getRiderById("rider1")).thenReturn(Optional.of(rider));
+        // Add rider using new signature
+        Mockito.doNothing().when(riderManager).addRider("rider1", 1, 2, "rider1@example.com", "testpass");
+        Mockito.when(rideService.getRiderById("rider1")).thenReturn(Optional.of(new Rider("rider1", 1, 2, "rider1@example.com", "testpass")));
         assert rideService.getRiderById("rider1").isPresent() : "Rider should be added successfully";
     }
 
     @Test
     public void testAddRiderWithEmptyId() {
-        Rider rider = new Rider("", 0, 0);
-
-        // Try to add rider with empty ID
-        Mockito.doThrow(new IllegalArgumentException("Rider ID cannot be empty.")).when(riderManager).addRider(rider);
+        // Try to add rider with empty ID using new signature
+        Mockito.doThrow(new IllegalArgumentException("Rider ID cannot be empty.")).when(riderManager).addRider("", 1, 2, "", "");
         try {
-            riderManager.addRider(rider);
+            riderManager.addRider("", 1, 2, "", "");
             assert false : "Exception should be thrown for empty Rider ID";
         } catch (IllegalArgumentException e) {
             assert e.getMessage().equals("Rider ID cannot be empty.") : "Correct exception message expected";

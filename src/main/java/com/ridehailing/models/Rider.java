@@ -32,12 +32,24 @@ public class Rider {
     private int numRides = 0;
     @Column(name = "preferred_driver_id")
     private String preferredDriverId;
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
+    @Column(name = "password", nullable = false)
+    private String password;
 
     // Removed duplicate public Rider() constructor, Lombok's @NoArgsConstructor is sufficient
     public Rider(String id, int x, int y) {
         this.id = id;
         this.x = x;
         this.y = y;
+    }
+
+    public Rider(String id, int x, int y, String email, String password) {
+        this.id = id;
+        this.x = x;
+        this.y = y;
+        this.email = email;
+        this.password = password;
     }
 
     public double getDiscountPercentage() {

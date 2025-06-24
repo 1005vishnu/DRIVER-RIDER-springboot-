@@ -175,5 +175,38 @@ public class RideService {
         logger.debug("Fetching driver with ID: {}", driverId);
         return driverRepository.findById(driverId);
     }
-}
 
+    // Cancel active ride for a rider
+    public String cancelActiveRideForRider(String riderId) {
+        Ride activeRide = rideRepository.findActiveRideByRiderId(riderId);
+        if (activeRide == null) {
+            throw new RuntimeException("No active ride found for rider");
+        }
+        // Mark ride as stopped
+        activeRide.setActive(false);
+        // Optionally, set endX, endY, timeTaken to dummy values if needed
+        // Make driver available again
+        if (activeRide.getDriver() != null) {
+            activeRide.getDriver().setAvailable(true);
+            driverRepository.save(activeRide.getDriver());
+        }
+        rideRepository.save(activeRide);
+        return "Active ride cancelled for rider " + riderId;
+    }
+
+    // Payment for ride
+    public String payForRide(String rideId) {
+        Ride ride = getRideById(rideId);
+        if (ride.getPaid() != null && ride.getPaid()) {
+            throw new RuntimeException("Ride already paid");
+        }
+        if (ride.isActive()) {
+            throw new RuntimeException("Ride must be stopped before payment");
+        }
+        ride.pay();
+        rideRepository.save(ride);
+        // Calculate bill (with discount if applicable)
+        java.math.BigDecimal bill = com.ridehailing.services.BillingCalculator.calculateBill(ride);
+        return "Payment successful. Fare: Rs. " + bill;
+    }
+}

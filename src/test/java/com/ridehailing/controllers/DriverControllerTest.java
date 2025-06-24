@@ -44,9 +44,9 @@ class DriverControllerTest {
 
     @Test
     public void testAddDriver() throws Exception {
-        Driver driver = new Driver("driver1", 10, 20);
+        Driver driver = new Driver("driver1", 10, 20, "driver1@example.com", "testpass");
 
-        doNothing().when(driverManager).addDriver(anyString(), anyInt(), anyInt());
+        doNothing().when(driverManager).addDriver(anyString(), anyInt(), anyInt(), anyString(), anyString());
 
         mockMvc.perform(MockMvcRequestBuilders.post("/drivers/add")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -55,7 +55,7 @@ class DriverControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string("Driver driver1 added successfully."));
 
-        verify(driverManager, times(1)).addDriver("driver1", 10, 20);
+        verify(driverManager, times(1)).addDriver("driver1", 10, 20, "driver1@example.com", "testpass");
     }
 
 

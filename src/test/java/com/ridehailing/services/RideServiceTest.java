@@ -55,16 +55,16 @@ class RideServiceTest {
         MockitoAnnotations.openMocks(this);
         
         // Create test data
-        driver1 = new Driver("driver1", 0, 0);
+        driver1 = new Driver("driver1", 0, 0, "driver1@example.com", "testpass");
         driver1.setAvailable(true);
         driver1.setRating(4.5);
         
-        driver2 = new Driver("driver2", 10, 10);
+        driver2 = new Driver("driver2", 10, 10, "driver2@example.com", "testpass");
         driver2.setAvailable(true);
         driver2.setRating(4.8);
         
-        rider1 = new Rider("rider1", 1, 1);
-        rider2 = new Rider("rider2", 8, 8);
+        rider1 = new Rider("rider1", 1, 1, "rider1@example.com", "testpass");
+        rider2 = new Rider("rider2", 8, 8, "rider2@example.com", "testpass");
         
         ride1 = new Ride("ride1", rider1, driver1);
         
@@ -83,7 +83,7 @@ class RideServiceTest {
     @Test
     void testAddDriverAndMatchRider() {
         // Test adding a driver
-        driverManager.addDriver("driver3", 5, 5);
+        driverManager.addDriver("driver3", 5, 5, "driver3@example.com", "testpass");
         verify(driverRepository).save(any(Driver.class));
         
         // Test matching a rider with drivers
@@ -101,7 +101,7 @@ class RideServiceTest {
     @Test
     void testMatchRiderForMoreThan5km() {
         // Create a rider far from any driver
-        Rider farRider = new Rider("farRider", 50, 50);
+        Rider farRider = new Rider("farRider", 50, 50, "farRider@example.com", "testpass");
         when(riderRepository.findById("farRider")).thenReturn(Optional.of(farRider));
         
         // Test matching a rider that's too far
@@ -140,7 +140,7 @@ class RideServiceTest {
     @Test
     void testStartRideInvalidDriverIndex() {
         // Setup - driver not available
-        Driver unavailableDriver = new Driver("unavailableDriver", 3, 3);
+        Driver unavailableDriver = new Driver("unavailableDriver", 3, 3, "unavailableDriver@example.com", "testpass");
         unavailableDriver.setAvailable(false);
         when(driverRepository.findById("unavailableDriver")).thenReturn(Optional.of(unavailableDriver));
         

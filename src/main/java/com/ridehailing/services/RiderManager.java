@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,13 +26,22 @@ public class RiderManager {
         this.riderRepository = riderRepository;
     }
 
-    public void addRider(Rider rider) {
-        logger.info("Adding rider: {}", rider.getId());
+    public void addRider(String id, int x, int y, String email, String password) {
+        logger.info("Adding rider: {}", id);
+        Rider rider = new Rider(id, x, y, email, password);
         riderRepository.save(rider);
     }
 
     public Rider getRiderById(String id) {
         return riderRepository.findById(id).orElse(null);
+    }
+
+    public Optional<Rider> getRiderByEmailAndPassword(String email, String password) {
+        return riderRepository.findByEmailAndPassword(email, password);
+    }
+
+    public Optional<Rider> getRiderByEmail(String email) {
+        return riderRepository.findAll().stream().filter(r -> r.getEmail().equals(email)).findFirst();
     }
 
     public List<Driver> matchDrivers(Rider rider)

@@ -31,6 +31,12 @@ public class Driver {
     @Column(name = "available", nullable = false, columnDefinition = "BOOLEAN")
     private boolean available = true;
 
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
+
+    @Column(name = "password", nullable = false)
+    private String password;
+
     public Driver(String id, int x, int y) {
         this.id = id;
         this.x = x;
@@ -38,4 +44,12 @@ public class Driver {
         this.available = true;
     }
 
+    public Driver(String id, int x, int y, String email, String password) {
+        this.id = id;
+        this.x = x;
+        this.y = y;
+        this.email = email;
+        this.password = password;
+        this.available = true;
+    }
 }

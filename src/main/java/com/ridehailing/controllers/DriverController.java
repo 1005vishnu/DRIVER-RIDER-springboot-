@@ -27,8 +27,6 @@ public class DriverController {
         List<Driver> drivers = driverManager.getAllDrivers();
         return ResponseEntity.ok(drivers);
     }
-
-
     // Get a single driver by ID
 
     @GetMapping("/{id}")
@@ -50,7 +48,10 @@ public class DriverController {
     @PostMapping("/add")
     public ResponseEntity<String> addDriver(@Valid @RequestBody Driver driver) {
         try {
-            driverManager.addDriver(driver.getId(), driver.getX(), driver.getY());
+            if (driverManager.getDriverByEmail(driver.getEmail()).isPresent()) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already registered");
+            }
+            driverManager.addDriver(driver.getId(), driver.getX(), driver.getY(), driver.getEmail(), driver.getPassword());
             return ResponseEntity.ok("Driver " + driver.getId() + " added successfully.");
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to add driver.", e);

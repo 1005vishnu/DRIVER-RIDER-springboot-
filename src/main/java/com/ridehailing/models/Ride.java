@@ -41,6 +41,9 @@ public class Ride {
     @JoinColumn(name = "rider_id")
     private Rider rider;
 
+    @Column(name = "paid")
+    private Boolean paid = false;
+
     // Removed duplicate public Ride() constructor, Lombok's @NoArgsConstructor is sufficient
 
     public Ride(String rideId, Rider rider, Driver driver) {
@@ -65,5 +68,9 @@ public class Ride {
 
     public boolean isActive() {
         return active;
+    }
+
+    public void pay() {
+        this.paid = true;
     }
 }
