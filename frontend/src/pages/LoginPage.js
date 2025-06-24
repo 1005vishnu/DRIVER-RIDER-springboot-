@@ -7,7 +7,6 @@ function LoginPage() {
     role: "rider"
   });
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -17,22 +16,25 @@ function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setSuccess("");
     try {
       const params = new URLSearchParams({
         id: form.id,
         role: form.role
       });
-      const res = await fetch(`http://localhost:8080/auth/login?${params.toString()}`, {
+      const res = await fetch('http://localhost:8080/auth/login?' + params.toString(), {
         method: "POST"
       });
-      const text = await res.text();
-      if (res.status === 200) {
-        setSuccess("Login success! User found.");
-      } else if (res.status === 401) {
-        setError("User ID not found");
+      const data = await res.json(); 
+      if (res.status === 200 && data.status === 'success') {
+        localStorage.setItem('userId', form.id);
+        localStorage.setItem('role', form.role);
+        if (form.role === 'driver') {
+          navigate('/driver/dashboard');
+        } else {
+          navigate('/rider/book');
+        }
       } else {
-        setError(text);
+        setError(data.message || 'Login failed');
       }
     } catch (err) {
       setError("Connection error: Please check if the server is running");
@@ -69,11 +71,6 @@ function LoginPage() {
               <a href="/signup" style={{ color: '#0066cc', textDecoration: 'underline' }}>Sign up here</a>
             </div>
           )}
-        </div>
-      )}
-      {success && (
-        <div className="success" style={{ color: 'green', marginTop: '10px', padding: '10px', backgroundColor: '#e8f5e9', borderRadius: '4px' }}>
-          {success}
         </div>
       )}
     </div>
