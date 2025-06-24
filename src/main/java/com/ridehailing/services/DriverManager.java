@@ -19,14 +19,14 @@ public class DriverManager
         this.driverRepository = driverRepository;
     }
 
-    public void addDriver(String id, int x, int y)
+    public void addDriver(String id, int x, int y, String email, String password)
     {
         if (id == null || id.trim().isEmpty())
         {
             logger.warn("Attempted to add a driver with an invalid ID.");
             throw new IllegalArgumentException("Invalid Driver ID");
         }
-        Driver driver = new Driver(id, x, y);
+        Driver driver = new Driver(id, x, y, email, password);
         driverRepository.save(driver);
         logger.info("Driver {} added at location ({}, {})", id, x, y);
     }
@@ -41,6 +41,14 @@ public class DriverManager
 
     public Optional<Driver> getDriverById(String id) {
         return driverRepository.findById(id);
+    }
+
+    public Optional<Driver> getDriverByEmailAndPassword(String email, String password) {
+        return driverRepository.findByEmailAndPassword(email, password);
+    }
+
+    public Optional<Driver> getDriverByEmail(String email) {
+        return driverRepository.findAll().stream().filter(d -> d.getEmail().equals(email)).findFirst();
     }
 
     public boolean updateAvailability(String id, boolean available) {

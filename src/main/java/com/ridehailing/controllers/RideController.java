@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -23,11 +25,13 @@ public class RideController {
     }
 
     @PostMapping("/start")
-    public ResponseEntity<String> startRide(@RequestParam String riderId,
+    public ResponseEntity<Map<String, Object>> startRide(@RequestParam String riderId,
                                             @RequestParam(required = false) String driverId) {
         Optional<Rider> riderOpt = rideService.getRiderById(riderId);
         if (riderOpt.isEmpty()) {
-            return ResponseEntity.badRequest().body("Invalid rider ID");
+            Map<String, Object> resp = new HashMap<>();
+            resp.put("error", "Invalid rider ID");
+            return ResponseEntity.badRequest().body(resp);
         }
 
         Rider rider = riderOpt.get();
@@ -36,7 +40,9 @@ public class RideController {
         if (driverId != null && !driverId.isBlank()) {
             selectedDriver = rideService.getDriverById(driverId);
             if (selectedDriver.isEmpty() || !selectedDriver.get().isAvailable()) {
-                return ResponseEntity.badRequest().body("Provided driver is not available.");
+                Map<String, Object> resp = new HashMap<>();
+                resp.put("error", "Provided driver is not available.");
+                return ResponseEntity.badRequest().body(resp);
             }
         } else if (rider.getPreferredDriverId() != null) {
             selectedDriver = rideService.getDriverById(rider.getPreferredDriverId());
@@ -48,12 +54,25 @@ public class RideController {
         }
 
         if (selectedDriver.isEmpty()) {
-            return ResponseEntity.badRequest().body("No available drivers found.");
+            Map<String, Object> resp = new HashMap<>();
+            resp.put("error", "No available drivers found.");
+            return ResponseEntity.badRequest().body(resp);
         }
 
-
         String result = rideService.startRide(rider, selectedDriver.get());
-        return ResponseEntity.ok(result);
+        // result is like "RIDE_STARTED <rideId>" or just "<rideId>"
+        String rideId = null;
+        if (result != null) {
+            if (result.startsWith("RIDE_STARTED")) {
+                rideId = result.replace("RIDE_STARTED", "").trim();
+            } else {
+                rideId = result.trim();
+            }
+        }
+        Map<String, Object> resp = new HashMap<>();
+        resp.put("rideId", rideId);
+        resp.put("message", "Ride started");
+        return ResponseEntity.ok(resp);
     }
 
 
@@ -94,6 +113,26 @@ public class RideController {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Error submitting rating.");
+        }
+    }
+
+    @PostMapping("/cancel-active/{riderId}")
+    public ResponseEntity<String> cancelActiveRide(@PathVariable String riderId) {
+        try {
+            String result = rideService.cancelActiveRideForRider(riderId);
+            return ResponseEntity.ok(result);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/{rideId}/pay")
+    public ResponseEntity<String> payForRide(@PathVariable String rideId) {
+        try {
+            String result = rideService.payForRide(rideId);
+            return ResponseEntity.ok(result);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

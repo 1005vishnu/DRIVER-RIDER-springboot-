@@ -3,6 +3,7 @@ package com.ridehailing.controllers;
 import com.ridehailing.models.Driver;
 import com.ridehailing.models.Rider;
 import com.ridehailing.services.RiderManager;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,17 +21,20 @@ public class RiderController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addRider(@RequestBody Rider rider) {
+    public ResponseEntity<String> addRider(@Valid @RequestBody Rider rider) {
         if (rider.getId() == null || rider.getId().trim().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Rider ID cannot be empty.");
         }
 
         try {
-            riderManager.addRider(rider);
+            if (riderManager.getRiderByEmail(rider.getEmail()).isPresent()) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already registered");
+            }
+            riderManager.addRider(rider.getId(), rider.getX(), rider.getY(), rider.getEmail(), rider.getPassword());
+            return ResponseEntity.ok("Rider added successfully.");
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to add rider.", e);
         }
-        return ResponseEntity.ok("Rider added successfully.");
     }
 
     @GetMapping("/match")
