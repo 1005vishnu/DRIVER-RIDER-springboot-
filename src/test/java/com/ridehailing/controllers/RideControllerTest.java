@@ -72,7 +72,7 @@ class RideControllerTest {
                 .param("driverId", "D1")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().isOk())
-                .andExpect(content().string("ride123"));
+                .andExpect(content().json("{\"rideId\":\"ride123\",\"message\":\"Ride started\"}"));
     }
 
     @Test
@@ -86,7 +86,7 @@ class RideControllerTest {
                 .param("riderId", "invalidRider")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("Invalid rider ID"));
+                .andExpect(content().json("{\"error\":\"Invalid rider ID\"}"));
     }
 
     @Test

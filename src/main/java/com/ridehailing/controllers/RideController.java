@@ -60,10 +60,14 @@ public class RideController {
         }
 
         String result = rideService.startRide(rider, selectedDriver.get());
-        // result is like "RIDE_STARTED <rideId>"
+        // result is like "RIDE_STARTED <rideId>" or just "<rideId>"
         String rideId = null;
-        if (result != null && result.startsWith("RIDE_STARTED")) {
-            rideId = result.replace("RIDE_STARTED", "").trim();
+        if (result != null) {
+            if (result.startsWith("RIDE_STARTED")) {
+                rideId = result.replace("RIDE_STARTED", "").trim();
+            } else {
+                rideId = result.trim();
+            }
         }
         Map<String, Object> resp = new HashMap<>();
         resp.put("rideId", rideId);
