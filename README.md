@@ -116,7 +116,7 @@ curl -X POST "http://localhost:8080/riders/add" \
 ```
 **Match drivers for a rider**
 ```bash
-curl -X GET "http://localhost:8080/rides/match?riderId=R1"
+curl -X GET "http://localhost:8080/riders/match?riderId=R1"
 ```
 **start a ride (auto-select driver or use preferred driver)**
 ```bash
@@ -128,11 +128,13 @@ curl -X POST "http://localhost:8080/rides/start?riderId=R1&driverId=D1"
 ```
 **Stop a ride**
 ```bash
-curl -X POST "http://localhost:8080/rides/stop?rideId=RIDE-001&destX=4&destY=5&Timetaken=32"
+curl -X POST "http://localhost:8080/rides/254b1659-cb8e-4312-8563-3d1cabab1c82/stop?endX=4&endY=5&timeTaken=32"
+
 ```
 **Get bill for a ride**
 ```bash
-curl -X GET "http://localhost:8080/rides/bill?rideId=RIDE-001"
+curl -X GET "http://localhost:8080/rides/254b1659-cb8e-4312-8563-3d1cabab1c82/bill"
+
 ```
 ## Sample Input & Output
 
@@ -172,6 +174,12 @@ Ride Table
 | driver_id          | varchar(255) | YES  | MUL | NULL    |       |
 | rider_id           | varchar(255) | YES  | MUL | NULL    |       |
 | preferred_driver_id| varchar(255) | YES  |     | NULL    |       |
+
+
+**SEQUENCE DIAGRAM **
+
+![image](https://github.com/user-attachments/assets/7cb1bd2c-b8de-4457-a63d-99e146fcc515)
+
 
 ### Sample Input:
 ```
